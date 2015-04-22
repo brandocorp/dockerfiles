@@ -13,10 +13,12 @@ EXPOSE 9300
 
 ENV JAVA_HOME='/opt/java'
 
-RUN mkdir -p  /var/log/elasticsearch /var/lib/elasticsearch /tmp/elasticsearch && \
-  chown elasticsearch:elasticsearch /var/log/elasticsearch /var/lib/elasticsearch /tmp/elasticsearch
+# These directories and operations were pulled from the
+# elasticsearch deb package's init script
+RUN mkdir -p  /var/log/elasticsearch /var/lib/elasticsearch /tmp/elasticsearch \
+  && chown -R elasticsearch:elasticsearch /var/log/elasticsearch /var/lib/elasticsearch /tmp/elasticsearch
 
 USER elasticsearch
 
-# and the winner for the longest entrypoint ever goes to...
+# And the winner for the longest entrypoint ever goes to...
 ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch", "--default.config=/etc/elasticsearch/elasticsearch.yml", "--default.path.home=/usr/share/elasticsearch", "--default.path.logs=/var/log/elasticsearch", "--default.path.data=/var/lib/elasticsearch", "--default.path.work=/tmp/elasticsearch", "--default.path.conf=/etc/elasticsearch"]
